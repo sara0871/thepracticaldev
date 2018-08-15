@@ -88,6 +88,7 @@ def async_setup(hass, config):
 
         tasks = []
         for input_datetime in target_inputs:
+            input_datetime.async_set_context(call.context)
             time = call.data.get(ATTR_TIME)
             date = call.data.get(ATTR_DATE)
             if (input_datetime.has_date() and not date) or \

@@ -105,6 +105,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for switch in target_switches:
+            switch.async_set_context(service.context)
+
             if service.service == SERVICE_TURN_ON:
                 await switch.async_turn_on()
             elif service.service == SERVICE_TOGGLE:
@@ -115,7 +117,7 @@ async def async_setup(hass, config):
             if not switch.should_poll:
                 continue
             update_tasks.append(
-                switch.async_update_ha_state(True, service.context))
+                switch.async_update_ha_state(True))
 
         if update_tasks:
             await asyncio.wait(update_tasks, loop=hass.loop)

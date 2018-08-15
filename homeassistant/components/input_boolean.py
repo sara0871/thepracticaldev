@@ -95,7 +95,12 @@ async def async_setup(hass, config):
         else:
             attr = 'async_toggle'
 
-        tasks = [getattr(input_b, attr)() for input_b in target_inputs]
+        tasks = []
+
+        for input_b in target_inputs:
+            input_b.async_set_context(service.context)
+            tasks.append(getattr(input_b, attr)())
+
         if tasks:
             await asyncio.wait(tasks, loop=hass.loop)
 

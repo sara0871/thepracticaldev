@@ -112,8 +112,11 @@ def async_setup(hass, config):
         """Handle a calls to the input box services."""
         target_inputs = component.async_extract_from_service(call)
 
-        tasks = [input_text.async_set_value(call.data[ATTR_VALUE])
-                 for input_text in target_inputs]
+        tasks = []
+        for input_text in target_inputs:
+            input_text.async_set_context(call.context)
+            tasks.append(input_text.async_set_value(call.data[ATTR_VALUE]))
+
         if tasks:
             yield from asyncio.wait(tasks, loop=hass.loop)
 

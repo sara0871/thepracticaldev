@@ -216,6 +216,8 @@ def async_setup(hass, config: dict):
 
         update_tasks = []
         for fan in target_fans:
+            fan.async_set_context(service.context)
+
             yield from getattr(fan, method['method'])(**params)
             if not fan.should_poll:
                 continue

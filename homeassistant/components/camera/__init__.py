@@ -195,6 +195,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for camera in target_cameras:
+            camera.async_set_context(service.context)
+
             if service.service == SERVICE_ENABLE_MOTION:
                 await camera.async_enable_motion_detection()
             elif service.service == SERVICE_DISABLE_MOTION:

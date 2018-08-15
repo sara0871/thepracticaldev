@@ -125,7 +125,12 @@ async def async_setup(hass, config):
         elif service.service == SERVICE_RESET:
             attr = 'async_reset'
 
-        tasks = [getattr(counter, attr)() for counter in target_counters]
+        tasks = []
+
+        for counter in target_counters:
+            counter.async_set_context(service.context)
+            tasks.append(getattr(counter, attr)())
+
         if tasks:
             await asyncio.wait(tasks, loop=hass.loop)
 

@@ -145,20 +145,23 @@ async def async_setup(hass, config):
         """Handle a call to the timer services."""
         target_timers = component.async_extract_from_service(service)
 
-        attr = None
-        if service.service == SERVICE_PAUSE:
-            attr = 'async_pause'
-        elif service.service == SERVICE_CANCEL:
-            attr = 'async_cancel'
-        elif service.service == SERVICE_FINISH:
-            attr = 'async_finish'
+        for timer in target_timers:
+            timer.async_set_context(service.context)
 
-        tasks = [getattr(timer, attr)() for timer in target_timers if attr]
         if service.service == SERVICE_START:
-            for timer in target_timers:
-                tasks.append(
-                    timer.async_start(service.data.get(ATTR_DURATION))
-                )
+            duration = service.data[ATTR_DURATION]
+            tasks = [timer.async_start(duration) for timer in target_timers]
+
+        else:
+            if service.service == SERVICE_PAUSE:
+                attr = 'async_pause'
+            elif service.service == SERVICE_CANCEL:
+                attr = 'async_cancel'
+            elif service.service == SERVICE_FINISH:
+                attr = 'async_finish'
+
+            tasks = [getattr(timer, attr)() for timer in target_timers]
+
         if tasks:
             await asyncio.wait(tasks, loop=hass.loop)
 

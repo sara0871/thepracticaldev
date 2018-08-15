@@ -155,6 +155,7 @@ def async_setup(hass, config):
         # call method
         update_tasks = []
         for target_input in target_inputs:
+            target_input.async_set_context(service.context)
             yield from getattr(target_input, method['method'])(**params)
             if not target_input.should_poll:
                 continue

@@ -258,6 +258,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             if away_mode:
                 await climate.async_turn_away_mode_on()
             else:
@@ -282,6 +284,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             await climate.async_set_hold_mode(hold_mode)
 
             if not climate.should_poll:
@@ -303,6 +307,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             if aux_heat:
                 await climate.async_turn_aux_heat_on()
             else:
@@ -325,6 +331,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             kwargs = {}
             for value, temp in service.data.items():
                 if value in CONVERTIBLE_ATTRIBUTE:
@@ -357,6 +365,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             await climate.async_set_humidity(humidity)
             if not climate.should_poll:
                 continue
@@ -377,6 +387,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             await climate.async_set_fan_mode(fan)
             if not climate.should_poll:
                 continue
@@ -397,6 +409,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             await climate.async_set_operation_mode(operation_mode)
             if not climate.should_poll:
                 continue
@@ -417,6 +431,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             await climate.async_set_swing_mode(swing_mode)
             if not climate.should_poll:
                 continue
@@ -435,6 +451,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for climate in target_climate:
+            climate.async_set_context(service.context)
+
             if service.service == SERVICE_TURN_ON:
                 await climate.async_turn_on()
             elif service.service == SERVICE_TURN_OFF:

@@ -110,6 +110,8 @@ def async_setup(hass, config):
 
         update_tasks = []
         for entity in target_locks:
+            entity.async_set_context(service.context)
+
             if service.service == SERVICE_LOCK:
                 yield from entity.async_lock(code=code)
             elif service.service == SERVICE_OPEN:

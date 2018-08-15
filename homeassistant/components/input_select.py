@@ -134,8 +134,12 @@ def async_setup(hass, config):
         """Handle a calls to the input select option service."""
         target_inputs = component.async_extract_from_service(call)
 
-        tasks = [input_select.async_select_option(call.data[ATTR_OPTION])
-                 for input_select in target_inputs]
+        tasks = []
+        for input_select in target_inputs:
+            input_select.async_set_context(call.context)
+            tasks.append(
+                input_select.async_select_option(call.data[ATTR_OPTION]))
+
         if tasks:
             yield from asyncio.wait(tasks, loop=hass.loop)
 
@@ -148,8 +152,11 @@ def async_setup(hass, config):
         """Handle a calls to the input select next service."""
         target_inputs = component.async_extract_from_service(call)
 
-        tasks = [input_select.async_offset_index(1)
-                 for input_select in target_inputs]
+        tasks = []
+        for input_select in target_inputs:
+            input_select.async_set_context(call.context)
+            tasks.append(input_select.async_offset_index(1))
+
         if tasks:
             yield from asyncio.wait(tasks, loop=hass.loop)
 
@@ -162,8 +169,11 @@ def async_setup(hass, config):
         """Handle a calls to the input select previous service."""
         target_inputs = component.async_extract_from_service(call)
 
-        tasks = [input_select.async_offset_index(-1)
-                 for input_select in target_inputs]
+        tasks = []
+        for input_select in target_inputs:
+            input_select.async_set_context(call.context)
+            tasks.append(input_select.async_offset_index(-1))
+
         if tasks:
             yield from asyncio.wait(tasks, loop=hass.loop)
 

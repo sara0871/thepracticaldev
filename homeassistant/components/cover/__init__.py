@@ -171,6 +171,8 @@ async def async_setup(hass, config):
         # call method
         update_tasks = []
         for cover in covers:
+            cover.async_set_context(service.context)
+
             await getattr(cover, method['method'])(**params)
             if not cover.should_poll:
                 continue

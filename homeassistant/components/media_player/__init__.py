@@ -439,6 +439,8 @@ async def async_setup(hass, config):
 
         update_tasks = []
         for player in target_players:
+            player.async_set_context(service.context)
+
             await getattr(player, method['method'])(**params)
             if not player.should_poll:
                 continue
